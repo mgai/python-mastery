@@ -76,6 +76,7 @@ def read_file(file, method):
         print(
             f"{len(my_array)} records read. Current memory: {current:.2f}, Peak: {peak:.2f}."
         )
+    return my_array
 
 
 # Per test, the memory footprint is as below for peak
