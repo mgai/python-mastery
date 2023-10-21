@@ -81,3 +81,25 @@ def read_file(file, method):
 
 # Per test, the memory footprint is as below for peak
 # Class > Named Tuple > Tuple > Class with Slots
+
+
+# Ex 2.5
+def read_rides_as_columns(filename):
+    """
+    Read the bus ride data into 4 lists, representing columns.
+    """
+    import csv
+
+    routes = []
+    dates = []
+    daytypes = []
+    numrides = []
+    with open(filename) as f:
+        rows = csv.reader(f)
+        headings = next(rows)
+        for row in rows:
+            routes.append(row[0])
+            dates.append(row[1])
+            daytypes.append(row[2])
+            numrides.append(row[3])
+    return dict(routes=routes, dates=dates, daytypes=daytypes, numrides=numrides)
