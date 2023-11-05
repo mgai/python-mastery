@@ -41,6 +41,8 @@ def print_portfolio(portfolio, fields):
 
 
 class Stock:
+    types = (str, int, float)
+
     def __init__(self, name, shares, price) -> None:
         self.name = name
         self.shares = int(shares)
@@ -54,3 +56,14 @@ class Stock:
             self.shares -= shares
         else:
             raise ValueError("Not enough shares available to sell.")
+
+    @classmethod
+    def from_row(cls, row):
+        values = [func(val) for func, val in zip(cls.types, row)]
+        return cls(*values)
+
+
+def test_row_creation():
+    row = ["AA", "100", "32.20"]
+    s = Stock.from_row(row)
+    print("%10s %10d %10.2f" % (s.name, s.shares, s.price))
