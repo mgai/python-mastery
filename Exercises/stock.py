@@ -11,6 +11,26 @@ def read_portfolio(file):
     return shares
 
 
+def read_portfolio2(file):
+    shares = []
+    with open(file) as f:
+        rows = csv.reader(f)
+        _ = next(rows)
+        for row in rows:
+            shares.append(Stock.from_row(row))
+    return shares
+
+
+def read_portfolio3(file, cls):
+    shares = []
+    with open(file) as f:
+        rows = csv.reader(f)
+        _ = next(rows)
+        for row in rows:
+            shares.append(cls.from_row(*row))
+    return shares
+
+
 # Python does not have overloading, so this functional will NOT be called.
 def print_portfolio(portfolio):
     format = "%10s %10d %10.2f"
@@ -43,10 +63,20 @@ def print_portfolio(portfolio, fields):
 class Stock:
     types = (str, int, float)
 
+    """
+    This is not a good design approach,
+    because it mixes the initialization with the type conversion,
+    limiting the future extensibility.
+    """
+    # def __init__(self, name, shares, price) -> None:
+    #     self.name = name
+    #     self.shares = int(shares)
+    #     self.price = float(price)
+
     def __init__(self, name, shares, price) -> None:
         self.name = name
-        self.shares = int(shares)
-        self.price = float(price)
+        self.shares = shares
+        self.price = price
 
     def cost(self):
         return self.shares * self.price
@@ -61,6 +91,13 @@ class Stock:
     def from_row(cls, row):
         values = [func(val) for func, val in zip(cls.types, row)]
         return cls(*values)
+
+
+from decimal import Decimal
+
+
+class DStock(Stock):
+    types = (str, int, Decimal)
 
 
 def test_row_creation():
